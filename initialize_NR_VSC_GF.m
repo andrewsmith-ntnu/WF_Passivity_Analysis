@@ -1,4 +1,5 @@
 function conv = initialize_NR_VSC_GF(conv)
+% Initializes the state variables and steady-state values for the Newton-Raphson VSC grid-forming converter model.
 
 conv.ss.ioq0 = -conv.ss.iod0./conv.ss.pref0.*conv.ss.qref0;
 conv.ss.voq0 = 0;

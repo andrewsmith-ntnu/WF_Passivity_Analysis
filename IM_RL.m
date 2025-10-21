@@ -1,3 +1,6 @@
+% Im rl — auto-generated summary
+%
+% Auto-generated placeholder. Please replace with a concise description and usage.
 function [Z_frd]=IM_RL(f,f1,R,L)
 % IM_RL  Sequence-domain impedance of an RL element
 %

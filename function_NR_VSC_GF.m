@@ -1,4 +1,5 @@
 function[y,dy]=function_NR_VSC_GF(x,conv)
+% Calculates the Newton-Raphson equations and Jacobian for the VSC grid-forming converter model.
 
 y(1) = -1./conv.parameters.lf.*(x(3).*conv.pu.Omegab+x(3).*conv.parameters.kad.*conv.pu.Omegab-x(9).*conv.parameters.kad.*conv.pu.Omegab-x(3).*conv.parameters.kffv.*conv.pu.Omegab-x(7).*conv.parameters.kic.*conv.pu.Omegab+x(1).*conv.parameters.kpc.*conv.pu.Omegab-x(11).*conv.parameters.kiq.*conv.parameters.kpc.*conv.pu.Omegab+x(3).*x(5).*conv.parameters.kpc.*conv.parameters.kpp.*conv.pu.Omegab+x(4).*x(6).*conv.parameters.kpc.*conv.parameters.kpp.*conv.pu.Omegab-conv.parameters.kpc.* ...
   conv.parameters.kpp.*conv.ss.pref0.*conv.pu.Omegab+x(1).*conv.parameters.rf.*conv.pu.Omegab);

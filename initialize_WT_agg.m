@@ -1,5 +1,5 @@
 function [cvtr_agg] = initialize_WT_agg(cvtr,Sb_WF,r_g_agg,l_g_agg)
-
+% Initializes the aggregated wind turbine converter model based on the single wind turbine converter parameters and aggregated grid-side impedance.
 
 cvtr_agg=cvtr;
 

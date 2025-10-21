@@ -1,3 +1,6 @@
+% Im c — auto-generated summary
+%
+% Auto-generated placeholder. Please replace with a concise description and usage.
 function [Z_frd]=IM_C(f,f1,C)
 % IM_C  Sequence-domain impedance for a capacitor with frequency shift
 %

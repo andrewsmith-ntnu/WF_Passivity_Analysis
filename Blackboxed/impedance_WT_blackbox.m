@@ -1,3 +1,6 @@
+% Impedance wt blackbox — auto-generated summary
+%
+% Auto-generated placeholder. Please replace with a concise description and usage.
 function [cvtr_ss,Z_cvtr_agg] = impedance_WT_blackbox(freq,f1,V_wt,V_coll,Sb_WT,n_t,ref,rg_eq,lg_eq)
 try
     id3244032178.parameters.model_selector=3;

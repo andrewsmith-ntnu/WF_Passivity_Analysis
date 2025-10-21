@@ -1,4 +1,6 @@
 function [cvtr] = NR_steadystate_VSC_GF(cvtr)
+% Calculate the steady state operating point of a grid-following VSC using Newton-Raphson method.
+
 %% 'solveNewtonRaphson' function parameters
 cnv = sqrt(eps); %Accuracy
 Ns = 100;         %Number of iterations

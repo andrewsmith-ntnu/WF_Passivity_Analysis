@@ -1,4 +1,5 @@
 function conv = matrix_VSM_DEM(conv,conv_str)
+% Calculate the matrixes for the linear model of the VSM DEM converter with PLL.
 
 %% Calculate the matrixes for the linear model
 conv.A=[-1./conv.parameters.lf.*(conv.parameters.kpc+conv.parameters.rf).*conv.pu.Omegab,conv.pu.Omegab.*(conv.ss.Omegag0-conv.ss.Omegavsm0),(-1-conv.parameters.kad+conv.parameters.kffv)./conv.parameters.lf.*conv.pu.Omegab,0,0,0,conv.parameters.kic./conv.parameters.lf.*conv.pu.Omegab,0,conv.parameters.kad./conv.parameters.lf.*conv.pu.Omegab,0,0,conv.parameters.kpc./conv.parameters.lf.*conv.pu.Omegab,0,-conv.ss.ilq0.*conv.pu.Omegab,0,0,0,0,0;

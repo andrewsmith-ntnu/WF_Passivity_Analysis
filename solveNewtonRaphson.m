@@ -1,4 +1,5 @@
 function [xs,dxs] = solveNewtonRaphson(fun,ys,xg,cnv,Ns,bta,litmax)
+% Solve a system of nonlinear equations using the Newton-Raphson method with backtracking.
 
 x = xg;
 

@@ -1,4 +1,6 @@
 function cvtr = initialize_WT_default_gfl(WF)
+% Initializes the wind turbine converter model in grid-following mode with default parameters.
+
 % CC_DEM_noPLL = 0, CC_DEM = 1, CC_QSEM_noPLL = 2, CC_QSEM =3, VCVSM_noPLL, = 4, VCVSM = 5, GF-PQ = 6
 
 cvtr.parameters.model_selector=6;

@@ -1,4 +1,5 @@
 function conv = steadystate_VSC_GF(conv,input)
+% Calculate the steady state operating point of a grid-following VSC.
 
 switch nargin
 case 1

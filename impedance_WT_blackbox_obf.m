@@ -1,4 +1,5 @@
 function [cvtr_ss,Z_cvtr_agg] = impedance_WT_blackbox_obf(freq,f1,V_wt,V_coll,Sb_WT,n_t,ref,rg_eq,lg_eq)
+% Calculates the state-space model and impedance of a black-boxed wind turbine converter
 try
     id3244032178.parameters.model_selector=3;
     

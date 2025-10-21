@@ -1,4 +1,5 @@
 function conv = steadystate_VSM_QSEM_noPLL(conv,input)
+% Calculate the steady state operating point of a grid-forming VSM QSEM converter without PLL
 
 switch nargin
 case 1
