@@ -196,7 +196,7 @@ plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
 c.Layout.Tile = 'east';
-clim([p_vary(1)/n_all*100 p_vary(end)/n_all*100]);
+clim([p_vary.val(1)/n_all*100 p_vary.val(end)/n_all*100]);
 title(c,'\# Turbines (\%)','interpreter','latex');
 
 
@@ -346,7 +346,7 @@ plot_p_vary(f,{WF.Imp.Z_wf},Z2_array_off,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
 c.Layout.Tile = 'east';
-clim([p_vary(1) p_vary(end)]);
+clim([p_vary.val(1) p_vary.val(end)]);
 title(c,'$L_g (pu)$','interpreter','latex');
 
 

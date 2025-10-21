@@ -1,6 +1,25 @@
 function [cvtr_ss,Z_cvtr_agg] = impedance_WT_blackbox(freq,f1,V_wt,V_coll,Sb_WT,n_t,ref,rg_eq,lg_eq)
+% impedance_WT_blackbox  Build black-box WT aggregated impedance model
+%
+% [cvtr_ss, Z_cvtr_agg] = impedance_WT_blackbox(freq, f1, V_wt, V_coll, Sb_WT, n_t, ref, rg_eq, lg_eq)
+%
+% Inputs
+%   freq   - frequency vector (Hz)
+%   f1     - fundamental frequency (Hz)
+%   V_wt   - nominal winding voltage of a WT (V)
+%   V_coll - collection voltage used for scaling
+%   Sb_WT  - rated apparent power of one WT
+%   n_t    - number of turbines in the farm
+%   ref    - references struct with fields pref, qref, vref, omegaref
+%   rg_eq  - equivalent grid resistance for black-box aggregation
+%   lg_eq  - equivalent grid inductance for black-box aggregation
+%
+% Outputs
+%   cvtr_ss     - steady-state converter struct used for black-box model
+%   Z_cvtr_agg  - aggregated impedance (sequence-domain FRD)
+
 try
-    cvtr.parameters.model_selector=3;
+  cvtr.parameters.model_selector = 3;
     
     %% preinitialize variables that may be missing
     cvtr.ss.Kappa0 = 0;
