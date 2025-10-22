@@ -1,5 +1,5 @@
 function [cvtr_agg,Z_cvtr_agg] = impedance_WT_agg(freq,cvtr,Sb_WF,r_g_agg,l_g_agg)
-% impedance_WT_agg  Aggregate single-WT model into equivalent aggregated model
+% Aggregate single-WT model into equivalent aggregated model
 %
 % [cvtr_agg, Z_cvtr_agg] = impedance_WT_agg(freq, cvtr, Sb_WF, r_g_agg, l_g_agg)
 %

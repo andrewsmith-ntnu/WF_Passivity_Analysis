@@ -1,5 +1,5 @@
 function [cvtr] = base_values(cvtr)
-% base_values  Compute per-unit base values for a converter struct
+% Compute per-unit base values for a converter struct
 %
 % cvtr = base_values(cvtr)
 %

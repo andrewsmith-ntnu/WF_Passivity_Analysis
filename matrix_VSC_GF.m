@@ -1,5 +1,5 @@
 function conv = matrix_VSC_GF(conv,conv_str)
-% Calculate the matrixes for the linear model of the VSC grid-following converter.
+%Calculate the matrixes for the linear model of the VSC grid-following converter.
 
 %% Calculate the matrixes for the linear model
 conv.A=[-1./conv.parameters.lf.*(conv.parameters.kpc+conv.parameters.rf).*conv.pu.Omegab,0,-(1+conv.parameters.kad-conv.parameters.kffv+conv.ss.iod0.*conv.parameters.kpc.*conv.parameters.kpp)./conv.parameters.lf.*conv.pu.Omegab,-conv.ss.ioq0.*conv.parameters.kpc.*conv.parameters.kpp./conv.parameters.lf.*conv.pu.Omegab,-conv.parameters.kpc.*conv.parameters.kpp./conv.parameters.lf.*conv.ss.vod0.*conv.pu.Omegab,-conv.parameters.kpc.*conv.parameters.kpp./conv.parameters.lf.*conv.ss.voq0.*conv.pu.Omegab,conv.parameters.kic./conv.parameters.lf.*conv.pu.Omegab,0,conv.parameters.kad./conv.parameters.lf.*conv.pu.Omegab,0,conv.parameters.kiq.*conv.parameters.kpc./conv.parameters.lf.*conv.pu.Omegab,0,0,0,0,0;

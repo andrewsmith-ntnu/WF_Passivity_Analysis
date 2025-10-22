@@ -1,8 +1,5 @@
-% Im rl — auto-generated summary
-%
-% Auto-generated placeholder. Please replace with a concise description and usage.
 function [Z_frd]=IM_RL(f,f1,R,L)
-% IM_RL  Sequence-domain impedance of an RL element
+% Sequence-domain impedance of an RL element
 %
 % [Z_frd] = IM_RL(f, f1, R, L)
 %
@@ -18,7 +15,7 @@ function [Z_frd]=IM_RL(f,f1,R,L)
 omega = f * 2*pi;
 n = 1;
 for s = 1i * omega
-    % positive and negative sequence impedances (s shifted by +/- f1)
+    % positive and negative sequence impedances
     Zp = R + L * (s + f1*2*pi*1i);
     Zn = R + L * (s - f1*2*pi*1i);
     Z(:,:,n) = [Zp 0; 0 Zn];

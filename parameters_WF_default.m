@@ -1,4 +1,4 @@
-% clear;
+% This script initializes default parameters for wind farm (WF) modeling. Use this to change the default values. 
 path_for_save='Figures/';
 set(0,'defaulttextinterpreter','latex');
 

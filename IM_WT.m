@@ -1,5 +1,5 @@
 function [Z_frd]=IM_WT(f,cvtr)
-% IM_WT  Compute sequence-domain impedance FRD for a WT converter model
+% Compute sequence-domain impedance FRD for a WT converter model
 %
 % [Z_frd] = IM_WT(f, cvtr)
 %

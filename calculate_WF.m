@@ -1,7 +1,5 @@
-% Calculate wf — 
-%
-% Calculates the wind farm parameters and impedance models based on the wind turbine and transmission system data.
 function WF = calculate_WF(WF)
+% Calculates the wind farm parameters and impedance models based on the wind turbine and transmission system data.
 
 WF.Sb_WF=WF.n_WT*WF.WT.Sb_WT;   %VA, Total WF rated power
 

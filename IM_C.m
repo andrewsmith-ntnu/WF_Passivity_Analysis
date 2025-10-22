@@ -1,8 +1,5 @@
-% Im c — auto-generated summary
-%
-% Auto-generated placeholder. Please replace with a concise description and usage.
 function [Z_frd]=IM_C(f,f1,C)
-% IM_C  Sequence-domain impedance for a capacitor with frequency shift
+% Sequence-domain impedance for a capacitor
 %
 % [Z_frd] = IM_C(f, f1, C)
 %
@@ -17,7 +14,7 @@ function [Z_frd]=IM_C(f,f1,C)
 omega = f * 2*pi;
 n = 1;
 for s = 1i * omega
-    % positive and negative sequence impedances (frequency shifted by +/- f1)
+    % positive and negative sequence impedances
     Zp = 1/(C * (s + f1*2*pi*1i));
     Zn = 1/(C * (s - f1*2*pi*1i));
     Z(:,:,n) = [Zp 0; 0 Zn];

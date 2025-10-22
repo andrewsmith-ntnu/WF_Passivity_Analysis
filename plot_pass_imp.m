@@ -1,5 +1,5 @@
 function [] = plot_pass_imp(f, Z1, Z2, n_o, n_i, plot_type)
-% plot_pass_imp  Plot passivity and impedance magnitude/imaginary part
+% Plot passivity and impedance magnitude/imaginary part
 %
 % plot_pass_imp(f, Z1, Z2, n_o, n_i, plot_type)
 %

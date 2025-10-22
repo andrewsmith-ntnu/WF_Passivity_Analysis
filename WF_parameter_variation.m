@@ -1,6 +1,5 @@
-% Wf parameter variation — auto-generated summary
-%
-% Auto-generated placeholder. Please replace with a concise description and usage.
+% Main script to run parameter variation cases for WF impedance modeling. 
+
 clear
 run('parameters_WF_default.m');
 mdl='WF_offshore.slx';

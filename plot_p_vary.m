@@ -1,5 +1,5 @@
 function [] = plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, opts)
-% plot_p_vary  Plot passivity and impedance variation across datasets
+% Plot passivity and impedance variation across datasets
 %
 % plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, opts)
 %

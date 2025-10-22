@@ -1,5 +1,5 @@
 function [cvtr_ss,Z_cvtr_agg] = impedance_WT_blackbox(freq,f1,V_wt,V_coll,Sb_WT,n_t,ref,rg_eq,lg_eq)
-% impedance_WT_blackbox  Build black-box WT aggregated impedance model
+% Build black-box WT aggregated impedance model
 %
 % [cvtr_ss, Z_cvtr_agg] = impedance_WT_blackbox(freq, f1, V_wt, V_coll, Sb_WT, n_t, ref, rg_eq, lg_eq)
 %

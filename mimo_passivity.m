@@ -1,5 +1,5 @@
 function pass = mimo_passivity(Z)
-% mimo_passivity  Simple positive-definiteness check for 2x2 FRD impedance
+% Simple positive-definiteness check for 2x2 FRD impedance
 %
 % pass = mimo_passivity(Z)
 %

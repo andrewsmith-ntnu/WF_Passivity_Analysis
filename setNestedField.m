@@ -1,5 +1,5 @@
 function S = setNestedField(S, fieldName, value)
-% setNestedField  Set nested struct field using dot-separated name
+% Set nested struct field using dot-separated name
 %
 % S = setNestedField(S, 'a.b.c', value)
 %
