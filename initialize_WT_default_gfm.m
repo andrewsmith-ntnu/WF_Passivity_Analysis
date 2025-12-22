@@ -79,6 +79,7 @@ cvtr.parameters.kiv = cvtr.parameters.kpv/cvtr.parameters.Tiv;
 
 % Feedforward terms
 cvtr.parameters.kffv = 1;   %Voltage feedforward
+cvtr.parameters.kffi = 0;   %Current feedforward
 
 % Tuning pll
 cvtr.parameters.apll = 2;
@@ -107,16 +108,6 @@ cvtr.parameters.kdrpq = 0.05;
 cvtr.parameters.Omegadf = 50;
 cvtr.parameters.Omegaqf = 100;
 
-%Active and reactive power controllers, GFL
-cvtr.parameters.ap = 2;
-cvtr.parameters.Tfp = cvtr.parameters.cf/cvtr.pu.Omegab;
-cvtr.parameters.Teqc = 2*cvtr.parameters.T_sw;
-cvtr.parameters.Tip = cvtr.parameters.ap^2*cvtr.parameters.Teqc;
-cvtr.parameters.kpp = cvtr.parameters.Tfp/(cvtr.parameters.ap*cvtr.parameters.Teqc);
-cvtr.parameters.kip = cvtr.parameters.kpp/cvtr.parameters.Tip;
-cvtr.parameters.kpq=cvtr.parameters.kpp;
-cvtr.parameters.kiq=cvtr.parameters.kip;
-
 
 %% References
 cvtr.ss.pref0 = 1;                  
@@ -128,6 +119,7 @@ cvtr.ss.vnd0 = cvtr.parameters.Vnr_pk/cvtr.pu.Vb;
 cvtr.ss.vnq0 = 0;                   
 cvtr.ss.Omegag0 = 1;                        
 cvtr.ss.DeltaThetavsm0 = 0;         
+cvtr.ss.DeltaThetavsm_mech0=cvtr.ss.DeltaThetavsm0;
 
 % switch cvtr.parameters.model_selector
 %     case 0

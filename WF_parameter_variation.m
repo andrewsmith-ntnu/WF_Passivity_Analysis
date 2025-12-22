@@ -13,9 +13,11 @@ Z1_on=WF.Imp.Z_wf;
 Z2_on=WF.Imp.Z_wf_grid;
 
 f=figure;
-plot_pass_imp(f,Z1_on,Z2_on,1,1);
+opts.plot_pass=1;
+opts.plot_imp=1;
+plot_p_vary(f,Z1_on,Z2_on,1,1,opts);
 
-%%
+%% Change parameter (location)
 
 WF.location='offshore';
 WF=calculate_WF(WF);
@@ -24,7 +26,8 @@ Z1_off=WF.Imp.Z_wf;
 Z2_off=WF.Imp.Z_wf_grid;
 
 f=figure;
-plot_pass_imp(f,Z1_off,Z2_off,1,1);
+plot_p_vary(f,Z1_off,Z1_off,1,1,opts);
+
 
 %% Compare with different grid strengths
 run('parameters_WF_default.m');
@@ -76,10 +79,10 @@ WF.WT.cvtr=initialize_WT_default_gfm(WF);
 WF_gfm=calculate_WF(WF);
 
 %Plot
-plot_pass_imp(f_on,WF_gfl.Imp.Z_wf,WF_gfl.Imp.Z_wf_grid,1,1);hold on
-plot_pass_imp(f_on,WF_gfm.Imp.Z_wf,WF_gfm.Imp.Z_wf_grid,1,1);
+plot_p_vary(f_on,WF_gfl.Imp.Z_wf,WF_gfl.Imp.Z_wf_grid,1,1,opts);hold on
+plot_p_vary(f_on,WF_gfm.Imp.Z_wf,WF_gfm.Imp.Z_wf_grid,1,1,opts);
 
-legend('GFL','','GFM','interpreter','latex','Location','northeast');
+legend('GFL','','','GFM','interpreter','latex','Location','northeast');
 
 %% Plot GFL vs GFM, offshore
 run('parameters_WF_default.m');
@@ -95,13 +98,54 @@ WF.WT.cvtr=initialize_WT_default_gfm(WF);
 WF_gfm=calculate_WF(WF);
 
 %Plot
-plot_pass_imp(f_off,WF_gfl.Imp.Z_wf,WF_gfl.Imp.Z_wf_grid,1,1);hold on
-plot_pass_imp(f_off,WF_gfm.Imp.Z_wf,WF_gfm.Imp.Z_wf_grid,1,1);
+plot_p_vary(f_off,WF_gfl.Imp.Z_wf,WF_gfl.Imp.Z_wf_grid,1,1,opts);hold on
+plot_p_vary(f_off,WF_gfm.Imp.Z_wf,WF_gfm.Imp.Z_wf_grid,1,1,opts);
 
-legend('GFL','','GFM','interpreter','latex','Location','northeast');
+legend('GFL','','','GFM','interpreter','latex','Location','northeast');
 
-%% Plot WF and cable impedance with negative zone, vary cable distance
+%% Plot WF and transmission passivity and impedance, vary onshore transmission length
 run('parameters_WF_default.m');
+% WF.WT.cvtr=initialize_WT_default_gfm(WF);
+clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
+
+% #### Define distances (scaled to nominal) ###
+scale_factor=linspace(0.5,10,10);
+r_OH_orig=WF.Trans.r_OH;
+l_OH_orig=WF.Trans.l_OH;
+
+% #### Iterate through each distance ####
+p_vary.val=scale_factor;
+
+
+% WF=setfield(WF,p_vary.name,60);
+for i=1:length(p_vary.val)
+    
+    %Offshore case
+    WF=setNestedField(WF,'Trans.r_OH',p_vary.val(i)*r_OH_orig);
+    WF=setNestedField(WF,'Trans.l_OH',p_vary.val(i)*l_OH_orig);
+    WF=calculate_WF(WF);
+    Z1_array_on{i}=WF.Imp.Z_wf;
+    Z2_array_on{i}=WF.Imp.Z_wf_grid;
+
+end
+
+% #### Plot Results ####
+f=figure;
+f.Position=f.Position.*[0,0,0.75*2,1.5];
+
+opts.plot_pass=1;
+opts.plot_type='imag';
+plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
+
+c=colorbar('FontSize',12,'TickLabelInterpreter','latex');%,'Ticks',p_vary);
+c.Layout.Tile = 'east';
+clim([p_vary.val(1)*l_OH_orig p_vary.val(end)*l_OH_orig]);
+title(c,'$l_{OH}$','Interpreter','latex');
+
+
+%% Plot WF and transmission passivity and impedance, vary offshore cable distance
+run('parameters_WF_default.m');
+% WF.WT.cvtr=initialize_WT_default_gfm(WF);
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define distances ####
@@ -111,22 +155,12 @@ D_C=10:4:150;
 p_vary.name='Trans.D_C';
 p_vary.val=10:4:150;
 
-WF_on=WF;
-WF_on.location='onshore';
-
 WF_off=WF;
 WF_off.location='offshore';
 
 
 % WF=setfield(WF,p_vary.name,60);
 for i=1:length(p_vary.val)
-    
-    %Onshore case
-    % WF_on.Trans.D_C=p_vary.val(i);
-    WF_on=setNestedField(WF_on,p_vary.name,p_vary.val(i));
-    WF_on=calculate_WF(WF_on);
-    Z1_array_on{i}=WF_on.Imp.Z_wf;
-    Z2_array_on{i}=WF_on.Imp.Z_wf_grid;
     
     %Offshore case
     WF_off=setNestedField(WF_off,p_vary.name,p_vary.val(i));
@@ -140,8 +174,7 @@ end
 f=figure;
 f.Position=f.Position.*[0,0,0.75*2,1.5];
 
-opts.plot_pass=0;
-plot_p_vary(f,{WF_off.Imp.Z_wf},Z2_array_off,1,1,opts);
+plot_p_vary(f,Z1_array_off,Z2_array_off,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');%,'Ticks',p_vary);
 c.Layout.Tile = 'east';
@@ -149,7 +182,7 @@ clim([p_vary.val(1) p_vary.val(end)]);
 title(c,'Distance (km)','Interpreter','latex');
 
 
-%% Plot WF and cable impedance with negative zone, vary # turbines
+%% Plot WF and transmission passivity and impedance, vary # turbines
 run('parameters_WF_default.m');
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
@@ -204,6 +237,7 @@ title(c,'\# Turbines (\%)','interpreter','latex');
 
 %% WF impedance with VSM control parameter variation, Active P ref
 run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfl(WF);
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define power references ####
@@ -237,8 +271,9 @@ end
 
 % #### Plot Results ####
 f=figure;
-f.Position=f.Position.*[0,0,0.75*2,1.5];
+f.Position=f.Position.*[0,0,1.5,0.75];
 opts.plot_pass=1;
+opts.plot_imp=0;
 plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
@@ -249,6 +284,7 @@ title(c,'$P_{ref}$','interpreter','latex');
 
 %% WF impedance with VSM control parameter variation, Reactive Q ref
 run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfl(WF);
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define power references ####
@@ -283,7 +319,7 @@ end
 
 % #### Plot Results ####
 f=figure;
-f.Position=f.Position.*[0,0,0.75*2,1.5];
+f.Position=f.Position.*[0,0,1.5,0.75];
 opts.plot_pass=1;
 plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
 
@@ -297,7 +333,7 @@ run('parameters_WF_default.m');
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define grid range ####
-% %Rg
+% % Rg
 % rg=linspace(0.001,0.1,9);
 % lg=0.1;
 % cvtr.parameters.lg=lg;
@@ -344,13 +380,220 @@ end
 f=figure;
 f.Position=f.Position.*[0,0,0.75*2,1.5];
 opts.plot_pass=1;
-plot_p_vary(f,{WF.Imp.Z_wf},Z2_array_off,1,1,opts);
+plot_p_vary(f,Z2_array_off,Z2_array_off,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
 c.Layout.Tile = 'east';
 clim([p_vary.val(1) p_vary.val(end)]);
 title(c,'$L_g (pu)$','interpreter','latex');
 
+%% WF impedance with VSM control parameter variation, voltage feedforward
+run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfl(WF);
+clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
+
+% #### Define parameter range ####
+kffv=[0 1];
+
+% #### Iterate ####
+p_vary.name='WT.cvtr.parameters.kffv';
+p_vary.val=kffv;
+
+%Onshore case
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_on{i}=WF.Imp.Z_wf;
+    Z2_array_on{i}=WF.Imp.Z_wf_grid;
+end
+
+
+%Offshore case
+WF.location='offshore';
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_off{i}=WF.Imp.Z_wf;
+    Z2_array_off{i}=WF.Imp.Z_wf_grid;
+end
+
+
+% #### Plot Results ####
+f=figure;
+f.Position=f.Position.*[0,0,1.5,0.75];
+opts.plot_pass=1;
+opts.plot_imp=0;
+plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
+
+c=colorbar('Ticks',p_vary.val,'FontSize',12,'TickLabelInterpreter','latex');
+c.Layout.Tile = 'east';
+clim([p_vary.val(1) p_vary.val(end)]);
+title(c,'$k_{ffv}$','interpreter','latex');
+
+
+%% WF impedance with VSM control parameter variation, virtual inductance
+run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfm(WF);
+clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
+
+% #### Define parameter range ####
+ls=linspace(0.001,0.8,30);
+rs=linspace(0.01,0.6,30);
+Omegavo=logspace(0,3,30);
+
+% #### Iterate ####
+p_vary.name='WT.cvtr.parameters.ls';
+p_vary.val=ls;
+
+
+%Onshore case
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_on{i}=WF.Imp.Z_wf;
+    Z2_array_on{i}=WF.Imp.Z_wf_grid;
+    eig_array_on{i}=eig(WF.WT.cvtr_agg.sys.A);
+end
+
+
+%Offshore case
+WF.location='offshore';
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_off{i}=WF.Imp.Z_wf;
+    Z2_array_off{i}=WF.Imp.Z_wf_grid;
+    eig_array_off{i}=eig(WF.WT.cvtr_agg.sys.A);
+end
+
+
+% #### Plot Results ####
+f=figure;
+f.Position=f.Position.*[0,0,1.5,0.75*2];
+opts.plot_pass=1;
+opts.plot_imp=1;
+opts.plot_type='mag';
+
+plot_p_vary(f,Z1_array_on,Z1_array_on,1,2,opts);
+
+c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
+c.Layout.Tile = 'east';
+clim([p_vary.val(1) p_vary.val(end)]);
+title(c,'$l_s$','interpreter','latex');
+
+% f2=figure;
+% plot_eig_vary(f2,eig_array_on);
+% 
+
+
+%% WF impedance with VSM control parameter variation, active damping
+run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfm(WF);
+clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
+
+% #### Define parameter range ####
+kad=linspace(1,30,30);
+Omegaad=logspace(1,3,30);
+
+% #### Iterate ####
+p_vary.name='WT.cvtr.parameters.kad';
+p_vary.val=kad;
+
+% WF.WT.cvtr.parameters.kad=20;
+% WF.WT.cvtr.parameters.Omegaad=.1;
+WF.WT.cvtr.parameters.kffv=0;
+
+%Onshore case
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_on{i}=WF.Imp.Z_wf;
+    Z2_array_on{i}=WF.Imp.Z_wf_grid;
+    Z2_array_on{i}.Name='Z_{on}';
+    eig_array{i}=eig(WF.WT.cvtr_agg.sys.A);
+end
+
+
+%Offshore case
+WF.location='offshore';
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_off{i}=WF.Imp.Z_wf;
+    Z2_array_off{i}=WF.Imp.Z_wf_grid;
+    Z2_array_off{i}.Name='Z_{off}';
+end
+
+
+% #### Plot Results ####
+f=figure;
+f.Position=f.Position.*[0,0,1.5,0.75];
+opts.plot_pass=1;
+opts.plot_imp=0;
+opts.plot_type='mag';
+plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
+
+c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
+c.Layout.Tile = 'east';
+clim([p_vary.val(1) p_vary.val(end)]);
+title(c,'$k_{ad}$','interpreter','latex');
+
+
+
+%% WF impedance with VSM control parameter variation, q. droop
+run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfm(WF);
+clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off eig_array
+
+% #### Define parameter range ####
+kdrpOmega=logspace(-1,2,30);
+ta=linspace(1,500,30);
+kdrpq=linspace(0.01,0.08,20);
+Omegalppll=logspace(-1,4,30);
+
+% #### Iterate ####
+p_vary.name='WT.cvtr.parameters.ta';
+p_vary.val=ta;
+
+% WF.WT.cvtr.parameters.Omegadf=200;
+
+%Onshore case
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_on{i}=WF.Imp.Z_wf;
+    Z2_array_on{i}=WF.Imp.Z_wf_grid;
+    if i==27
+        disp('');
+    end
+    eig_array{i}=eig(WF.WT.cvtr_agg.sys.A);
+end
+
+
+%Offshore case
+WF.location='offshore';
+for i=1:length(p_vary.val)
+    WF=setNestedField(WF,p_vary.name,p_vary.val(i));
+    WF=calculate_WF(WF);
+    Z1_array_off{i}=WF.Imp.Z_wf;
+    Z2_array_off{i}=WF.Imp.Z_wf_grid;
+end
+
+
+% #### Plot Results ####
+f=figure;
+f.Position=f.Position.*[0,0,1.5,0.75];
+opts.plot_pass=1;
+opts.plot_imp=0;
+plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
+
+c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
+c.Layout.Tile = 'east';
+clim([p_vary.val(1) p_vary.val(end)]);
+title(c,'$k_{q}$','interpreter','latex');
+
+% f2=figure;
+% plot_eig_vary(f2,eig_array);
 
 
 %% Blackbox impedance

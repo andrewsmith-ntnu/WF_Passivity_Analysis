@@ -38,6 +38,7 @@ if strcmp(WF.location,'onshore')
     WF.Imp.Z_wf=WF.Imp.Z_wf*(WF.V_trans/WF.V_coll)^2;
     %Combine with transmission and grid
     WF.Imp.Z_wf_grid=(WF.Imp.Z_wf^-1+(WF.Imp.Z_line_OH+WF.Imp.Z_line_G)^-1)^-1;
+    WF.Imp.Z_trans_grid=(WF.Imp.Z_line_OH+WF.Imp.Z_line_G);
 elseif strcmp(WF.location,'offshore')
     WF.Imp.Z_line_C=IM_RL(WF.freq,WF.f1,WF.Trans.r_c_eff*WF.Trans.D_C,WF.Trans.l_c_eff*WF.Trans.D_C);    %Cable series imp
     WF.Imp.Z_C_C=IM_C(WF.freq,WF.f1,WF.Trans.c_c_eff/2*WF.Trans.D_C);                  %Cable shunt imp
@@ -47,7 +48,7 @@ elseif strcmp(WF.location,'offshore')
     WF.L_comp=sqrt(2)*WF.l_comp*(WF.Imp.Z_b_G/(2*pi*WF.f1));
     WF.R_comp=0.1*WF.l_comp*WF.Imp.Z_b_G;
     WF.Imp.Z_comp = IM_RL(WF.freq,WF.f1,WF.R_comp,WF.L_comp); 
-    r_diss=.1;     %Temporary R to dissipate inrush currents, Simulink
+    WF.r_diss=.1;     %Temporary R to dissipate inrush currents, Simulink
 
     Z_eq_off=(((WF.Imp.Z_comp^-1+WF.Imp.Z_C_C^-1+WF.Imp.Z_line_G^-1)^-1+WF.Imp.Z_line_C)^-1+WF.Imp.Z_C_C^-1+WF.Imp.Z_comp^-1)^-1;
     Z_f1_on=Z_eq_off.ResponseData(:,:,1);
@@ -57,11 +58,13 @@ elseif strcmp(WF.location,'offshore')
     WF.Imp.Z_tf_WT=IM_RL(WF.Imp.Z_cvtr_agg.Frequency',WF.f1,WF.WT.r_tf*WF.Imp.Z_b_WF,WF.WT.l_tf*(WF.Imp.Z_b_WF/(2*pi*WF.f1)))*3;   %Note *3 factor to match Simulink transformer model. Due to different base impedance calculation
     WF.Imp.Z_tf_WF=IM_RL(WF.Imp.Z_cvtr_agg.Frequency',WF.f1,WF.r_tf*WF.Imp.Z_b_WF,WF.l_tf*(WF.Imp.Z_b_WF/(2*pi*WF.f1)))*3;
     WF.Imp.Z_wf=WF.Imp.Z_cvtr_agg+WF.Imp.Z_tf_WT+WF.Imp.Z_tf_WF;
+    
 
     %Convert to transmission voltage
     WF.Imp.Z_wf=WF.Imp.Z_wf*(WF.V_trans/WF.V_coll)^2;
     %Combine with transmission and grid
     WF.Imp.Z_wf_grid=(WF.Imp.Z_wf^-1+((WF.Imp.Z_C_C^-1+WF.Imp.Z_line_G^-1+WF.Imp.Z_comp^-1)^-1+WF.Imp.Z_line_C)^-1+WF.Imp.Z_C_C^-1+WF.Imp.Z_comp^-1)^-1;
+    WF.Imp.Z_trans_grid=(((WF.Imp.Z_C_C^-1+WF.Imp.Z_line_G^-1+WF.Imp.Z_comp^-1)^-1+WF.Imp.Z_line_C)^-1+WF.Imp.Z_C_C^-1+WF.Imp.Z_comp^-1)^-1;
 else
     warning('Location must be onshore or offshore');
 end

@@ -69,74 +69,81 @@ cvtr_agg.parameters.kiq = cvtr_agg.parameters.kip;
 %%
 switch cvtr_agg.parameters.model_selector
     case 0
-        selector_current_reference = 0;
-        enable_pll = 0;
+        cvtr_agg.parameters.selector_current_reference = 0;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 0;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_DEM_noPLL(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_DEM_noPLL(cvtr_agg,'VSM');
     case 1
-        selector_current_reference = 0;
-        selector_omega_reference = 0;
-        enable_pll = 1;
+        cvtr_agg.parameters.selector_current_reference = 0;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 1;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_DEM(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_DEM(cvtr_agg,'VSM');
     case 2
-        selector_current_reference = 1;
-        selector_omega_reference = 0;
-        enable_pll = 0;
+        cvtr_agg.parameters.selector_current_reference = 1;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 0;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_QSEM_noPLL(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_QSEM_noPLL(cvtr_agg,'VSM');
     case 3
-        selector_current_reference = 1;
-        selector_omega_reference = 0;
-        enable_pll = 1;
+        cvtr_agg.parameters.selector_current_reference = 1;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 1;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_QSEM(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_QSEM(cvtr_agg,'VSM');
     case 4
-        selector_current_reference = 2;
-        selector_omega_reference = 0;
-        enable_pll = 0;
+        cvtr_agg.parameters.selector_current_reference = 2;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 0;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_VC_noPLL(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_VC_noPLL(cvtr_agg,'VSM');
     case 5
-        selector_current_reference = 2;
-        selector_omega_reference = 0;
-        enable_pll = 1;
+        cvtr_agg.parameters.selector_current_reference = 2;
+        cvtr_agg.parameters.selector_omega_reference = 0;
+        cvtr_agg.parameters.enable_pll = 1;
         
         %% Steady state conditions
         cvtr_agg = steadystate_VSM_VC(cvtr_agg);
+        cvtr.ss.DeltaThetavsm0_mech0=cvtr.ss.DeltaThetavsm0;
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_VC(cvtr_agg,'VSM');
     case 6
-        selector_current_reference = 3;
-        selector_omega_reference = 1;
-        enable_pll = 1;
+        cvtr_agg.parameters.selector_current_reference = 3;
+        cvtr_agg.parameters.selector_omega_reference = 1;
+        cvtr_agg.parameters.enable_pll = 1;
         
         %% Steady state conditions
         cvtr_agg = NR_steadystate_VSC_GF(cvtr_agg);
         
         %% Calculate the matrices
-        cvtr_agg = matrix_VSC_GF(cvtr_agg,'VSM');
+        cvtr_agg = matrix_VSC_GF(cvtr_agg,'VSC');
 end
 
 eig_A = eig(cvtr_agg.A);

@@ -23,3 +23,5 @@ end
 
 % return as FRD with Hz units
 Z_frd = frd(Z, f, 'FrequencyUnit', 'Hz');
+Z_frd.InputName = {'i_p','i_n'};
+Z_frd.OutputName = {'v_p','v_n'};
