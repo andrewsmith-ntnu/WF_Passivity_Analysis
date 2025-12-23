@@ -1,4 +1,4 @@
-function [] = plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, opts)
+function [] = plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, varargin)
 % Plot passivity and impedance variation across datasets
 %
 % plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, opts)
@@ -16,13 +16,35 @@ function [] = plot_p_vary(f, Z1_array, Z2_array, n_o, n_i, opts)
 
 figure(f);
 f_size = 16;
-persistent colorIdx colorFig
 
+% Default Options
+def.plot_pass=1;
+def.plot_type='mag';
+def.plot_imp=1;
+
+%Set options needed
+if nargin<6
+  opts=def;
+else 
+  %Merge default values into opts  
+  A=fieldnames(def);  
+  opts=varargin{1};
+  for m=1:length(A)
+    if ~isfield(opts,A(m))
+      dum=char(A(m)); dum2=getfield(def,dum); opts=setfield(opts,dum,dum2);
+    end
+  end  
+end 
+
+persistent colorIdx colorFig
 
 if iscell(Z2_array)
     n_p = length(Z2_array);
     freq_array=Z2_array{1}.Frequency;
     color_plot = colormap(jet(max(1,n_p)));
+    if ~iscell(Z1_array)
+        Z1_array={Z1_array};
+    end
 else
     n_p=1;
     freq_array=Z2_array.Frequency;

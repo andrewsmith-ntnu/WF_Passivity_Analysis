@@ -4,7 +4,7 @@ function cvtr = initialize_WT_default_gfl(WF)
 
 % CC_DEM_noPLL = 0, CC_DEM = 1, CC_QSEM_noPLL = 2, CC_QSEM =3, VCVSM_noPLL, = 4, VCVSM = 5, GF-PQ = 6
 
-cvtr.parameters.model_selector=6;
+cvtr.parameters.model_selector=6;  
 
 %% preinitialize variables that may be missing
 cvtr.ss.Kappa0 = 0;
@@ -22,22 +22,22 @@ cvtr.ss.GammaSd0=0;
 cvtr.ss.GammaSq0=0;
 
 %% Electrical ratings
-cvtr.parameters.Vnr = WF.WT.V_wt; 
-cvtr.parameters.Vnr_pk = cvtr.parameters.Vnr*sqrt(2)/sqrt(3);
-cvtr.parameters.Inr = WF.WT.Sb_WT/cvtr.parameters.Vnr/sqrt(3);
-cvtr.parameters.fnr = WF.f1;
-cvtr.parameters.Omegan = 1;
-cvtr.parameters.Omegag = 1;
+cvtr.parameters.Vnr = WF.WT.V_wt;   %Nominal voltage rating (V)
+cvtr.parameters.Vnr_pk = cvtr.parameters.Vnr*sqrt(2)/sqrt(3);   %Peak voltage (V)
+cvtr.parameters.Inr = WF.WT.Sb_WT/cvtr.parameters.Vnr/sqrt(3);  %Nominal rated current (A)
+cvtr.parameters.fnr = WF.f1;        %Nominal turbine converter frequency (Hz)
+cvtr.parameters.Omegan = 1;         %Nominal grid frequency (pu)
+cvtr.parameters.Omegag = 1;         %Nominal grid frequency (pu)
 
-cvtr = base_values(cvtr);
+cvtr = base_values(cvtr);       %Calculate base values for per unit
 
 % Filter values
-cvtr.parameters.lf = .1;
-cvtr.parameters.rf = .005;
-cvtr.parameters.cf = 3e-2;
+cvtr.parameters.lf = .1;    %Filter inductance (pu)
+cvtr.parameters.rf = .005;  %Filter resistance (pu)
+cvtr.parameters.cf = 3e-2;  %Filter capacitance (pu)
 
 %Grid values
-cvtr.parameters.rg = 0.01;
+cvtr.parameters.rg = 0.01;  
 cvtr.parameters.lg = 0.1;
 
 % Parameters in absolute values
@@ -48,7 +48,7 @@ cvtr.parameters.Lg = cvtr.parameters.lg*cvtr.pu.Lb;
 cvtr.parameters.Rg = cvtr.parameters.rg*cvtr.pu.Zb;
 
 %% Controller parameters
-cvtr.parameters.f_sw = 10e3; % switching frequency
+cvtr.parameters.f_sw = 10e3; % Switching frequency (Hz)
 cvtr.parameters.T_sw = 1/(cvtr.parameters.f_sw);
 cvtr.parameters.T_cont = 1/cvtr.parameters.f_sw;     %Control sampling time
 cvtr.parameters.Ts_meas = 1/cvtr.parameters.f_sw;
@@ -68,13 +68,12 @@ end
 cvtr.parameters.Tl = cvtr.parameters.lf/(cvtr.parameters.rf*cvtr.pu.Omegab);
 cvtr.parameters.Tic = cvtr.parameters.Tl;
 cvtr.parameters.kpc = cvtr.parameters.Tl*cvtr.parameters.rf/(2*cvtr.parameters.T_sw);
-% cvtr.parameters.kpc = cvtr.parameters.Tl*cvtr.parameters.rf/(cvtr.parameters.T_sw);
 cvtr.parameters.kic = cvtr.parameters.kpc/cvtr.parameters.Tic;
 
 
 % Feedforward terms
-cvtr.parameters.kffv = 1;   %Voltage feedforward
-cvtr.parameters.kffi = 0;   %Current feedforward
+cvtr.parameters.kffv = 1;       %Voltage feedforward gain
+cvtr.parameters.kffi = 0;       %Current feedforward
 
 % Tuning pll
 cvtr.parameters.apll = 2;
@@ -103,8 +102,8 @@ cvtr.parameters.kiq=cvtr.parameters.kip;
 
 
 % VSM virtual impedance
-cvtr.parameters.rs = .02;
-cvtr.parameters.ls = .5;
+cvtr.parameters.rs = .02;   %Virtual resistance (pu)
+cvtr.parameters.ls = .5;    %Virtual inductance (pu)
 cvtr.parameters.Omegavo = 500;  %QSEM
 
 % Droop and VSM

@@ -1,6 +1,7 @@
 % Main script to run parameter variation cases for WF impedance modeling. 
 
 clear
+addpath('functions\');
 run('parameters_WF_default.m');
 mdl='WF_offshore.slx';
 
@@ -13,9 +14,8 @@ Z1_on=WF.Imp.Z_wf;
 Z2_on=WF.Imp.Z_wf_grid;
 
 f=figure;
-opts.plot_pass=1;
-opts.plot_imp=1;
-plot_p_vary(f,Z1_on,Z2_on,1,1,opts);
+
+plot_p_vary(f,Z1_on,Z2_on,1,1);
 
 %% Change parameter (location)
 
@@ -25,8 +25,8 @@ WF=calculate_WF(WF);
 Z1_off=WF.Imp.Z_wf;
 Z2_off=WF.Imp.Z_wf_grid;
 
-f=figure;
-plot_p_vary(f,Z1_off,Z1_off,1,1,opts);
+% f=figure;
+plot_p_vary(f,Z1_off,Z2_off,1,1);
 
 
 %% Compare with different grid strengths
@@ -54,7 +54,9 @@ Z2=WF.Imp.Z_wf_grid;
 % cvtr_WF=WF.WT.cvtr_agg;      %Set Simulink converter
 
 f=figure;
-plot_pass_imp(f,Z1,Z2,1,1);
+opts.plot_pass=1;
+opts.plot_imp=1;
+plot_p_vary(f,Z1,Z2,1,1,opts);
 
 %Second grid strength
 WF.Trans.rg=rg2;
@@ -62,8 +64,8 @@ WF.Trans.lg=lg2;
 WF=calculate_WF(WF);
 Z1=WF.Imp.Z_wf;
 Z2=WF.Imp.Z_wf_grid;
-plot_pass_imp(f,Z1,Z2,1,1);
-legend('$L_g=1$ pu','','$L_g=2$ pu','interpreter','latex','Location','northeast');
+plot_p_vary(f,Z1,Z2,1,1,opts);
+legend('$L_g=1$ pu','','','$L_g=2$ pu','interpreter','latex','Location','northeast');
 
 
 %% Plot GFL vs GFM, onshore
@@ -109,9 +111,9 @@ run('parameters_WF_default.m');
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define distances (scaled to nominal) ###
-scale_factor=linspace(0.5,10,10);
 r_OH_orig=WF.Trans.r_OH;
 l_OH_orig=WF.Trans.l_OH;
+scale_factor=linspace(0.02/l_OH_orig,0.3/l_OH_orig,10);
 
 % #### Iterate through each distance ####
 p_vary.val=scale_factor;
@@ -134,7 +136,7 @@ f=figure;
 f.Position=f.Position.*[0,0,0.75*2,1.5];
 
 opts.plot_pass=1;
-opts.plot_type='imag';
+opts.plot_type='mag';
 plot_p_vary(f,Z1_array_on,Z2_array_on,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');%,'Ticks',p_vary);
@@ -174,7 +176,7 @@ end
 f=figure;
 f.Position=f.Position.*[0,0,0.75*2,1.5];
 
-plot_p_vary(f,Z1_array_off,Z2_array_off,1,1,opts);
+plot_p_vary(f,WF_off.Imp.Z_wf,Z2_array_off,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');%,'Ticks',p_vary);
 c.Layout.Tile = 'east';
@@ -330,6 +332,7 @@ title(c,'$Q_{ref}$','interpreter','latex');
 
 %% WF impedance with VSM control parameter variation, grid impedance
 run('parameters_WF_default.m');
+WF.WT.cvtr=initialize_WT_default_gfl(WF);
 clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 
 % #### Define grid range ####
@@ -341,7 +344,7 @@ clear Z1_array_on Z1_array_off Z2_array_on Z2_array_off
 % Lg
 rg=0.01;
 WF.WT.cvtr.parameters.rg=rg;
-lg=linspace(0.01, 1,12);
+lg=linspace(0.1, 1,15);
 
 
 % #### Iterate ####
@@ -380,7 +383,8 @@ end
 f=figure;
 f.Position=f.Position.*[0,0,0.75*2,1.5];
 opts.plot_pass=1;
-plot_p_vary(f,Z2_array_off,Z2_array_off,1,1,opts);
+opts.plot_type='mag';
+plot_p_vary(f,Z2_array_on,Z2_array_on,1,1,opts);
 
 c=colorbar('FontSize',12,'TickLabelInterpreter','latex');
 c.Layout.Tile = 'east';

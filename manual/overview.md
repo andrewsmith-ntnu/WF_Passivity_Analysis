@@ -1,4 +1,4 @@
-# Public folder overview
+# Folder overview
 
 This page lists the functions and scripts in the Public folder with a one-line summary. For full per-file details see `functions.md` and `scripts.md`.
 

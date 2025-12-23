@@ -68,7 +68,7 @@ cvtr_agg.parameters.kiq = cvtr_agg.parameters.kip;
 
 %%
 switch cvtr_agg.parameters.model_selector
-    case 0
+    case 0 % CC_DEM_noPLL (Current-controlled dynamic electrical model with no PLL)
         cvtr_agg.parameters.selector_current_reference = 0;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 0;
@@ -79,7 +79,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_DEM_noPLL(cvtr_agg,'VSM');
-    case 1
+    case 1 % CC_DEM (Current-controlled dynamic electrical model)
         cvtr_agg.parameters.selector_current_reference = 0;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 1;
@@ -90,7 +90,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_DEM(cvtr_agg,'VSM');
-    case 2
+    case 2 % CC_QSEM_noPLL (Current-controlled quasi-static electrical model with no PLL)
         cvtr_agg.parameters.selector_current_reference = 1;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 0;
@@ -101,7 +101,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_QSEM_noPLL(cvtr_agg,'VSM');
-    case 3
+    case 3 % CC_QSEM (Current-controlled quasi-static electrical model)
         cvtr_agg.parameters.selector_current_reference = 1;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 1;
@@ -112,7 +112,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_QSEM(cvtr_agg,'VSM');
-    case 4
+    case 4 % VCVSM_noPLL (Voltage-controlled virtual synchronous machine with no PLL)
         cvtr_agg.parameters.selector_current_reference = 2;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 0;
@@ -123,7 +123,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_VC_noPLL(cvtr_agg,'VSM');
-    case 5
+    case 5 % VCVSM (Voltage-controlled virtual synchronous machine)
         cvtr_agg.parameters.selector_current_reference = 2;
         cvtr_agg.parameters.selector_omega_reference = 0;
         cvtr_agg.parameters.enable_pll = 1;
@@ -134,7 +134,7 @@ switch cvtr_agg.parameters.model_selector
         
         %% Calculate the matrices
         cvtr_agg = matrix_VSM_VC(cvtr_agg,'VSM');
-    case 6
+    case 6 % GFL (Grid-following)
         cvtr_agg.parameters.selector_current_reference = 3;
         cvtr_agg.parameters.selector_omega_reference = 1;
         cvtr_agg.parameters.enable_pll = 1;
